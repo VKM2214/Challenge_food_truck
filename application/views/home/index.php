@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Foodtrucks</title>
+    <meta name="description" content="A service that tells the user what types of food trucks might be found near a specific location on a map">
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel='shortcut icon' href='img/logo.png' type='image/x-icon'/ >
+    <link rel="stylesheet" type="text/css" href="css\app.css">
+
+    <!-- External vendor JS -->
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false&callback=myMap"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.3/backbone-min.js"></script>
+  </head>
+  <body>
+    <header>
+      <p>Food Trucks</p>
+    </header>
+
+    <section id="main">
+        <div id="map"></div>
+        <div id="filters"></div>
+    </section>
+
+    <!-- Templates -->
+    <script type="text/template" id="filters-template">
+        <div id="categories">
+            <div>
+                <h4>Craving something?</h4>
+                <input type="text" placeholder="e.g. Sandwich, Hot dogs" id="foodsearch" value="<%= searchedItem %>">
+            </div>
+            <hr />
+            <div>
+                <h4>Popular Searches</h4>
+                <ul id="filter-list">
+                    <% _.each(filters, function(filter){ %>
+                        <li class="filter-option">
+                            <label><input type="checkbox" data-filter-type="<%= filter.name %>"
+                            <% if(filter.selected){ %>
+                                checked
+                            <%}%>
+                            >
+                            <%= filter.text %></label>
+                        </li>
+                    <% }); %>
+                </ul>
+            </div>
+            <hr/ >
+            <div>
+                <button id="showAllBtn">Show All</button>
+                <button id="clearAllBtn">Clear All</button>
+            </div>
+        </div>
+        <div id="control"></div>
+    </script>
+    <script type="text/template" id="infowindow-template">
+        <div class="info-content">
+            <div class="truck-name"><%= truckname %></div>
+            <table>
+                <tr><th>Address</th><td>
+                    <a title="Find Direction to here" target="_blank" href="https://www.google.com/maps/dir/<%= pos %>"><%= address %>
+                    </a>
+                </td></tr>
+                <tr><th>Location Description</th><td><%= locationdescription %></td></tr>
+                <tr><th>Food Items</th><td>
+                    <ul>
+                    <% _.each(fooditems, function(item){ %>
+                        <li>- <%= item %></li>
+                    <% }); %>
+                    </ul>
+                </td></tr>
+            </table>
+        </div>
+    </script>
+
+    <!-- Backbone MVC views, models and collections -->
+    <script src="js/models/truck.js"></script>
+    <script src="js/collections/truck_list.js"></script>
+    <script src="js/views/map_view.js"></script>
+    <script src="js/views/marker_view.js"></script>
+    <script src="js/views/filter_view.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
